@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect, useState } from "react";
+import AddExpenseForm from "./components/AddExpenseForm";
+import CSVUpload from "./components/CSVUpload";
+import ExpenseTable from "./components/ExpenseTable";
+import CategoryChart from "./components/CategoryChart";
+import MonthlyChart from "./components/MonthlyChart";
+import { fetchAll, fetchCategoryReport, fetchMonthlyReport } from "./api";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [expenses, setExpenses] = useState([]);
+  const [categoryReport, setCategoryReport] = useState([]);
+  const [monthlyReport, setMonthlyReport] = useState([]);
+
+  const load = async () => {
+    const e = await fetchAll();
+    setExpenses(e);
+    setCategoryReport(await fetchCategoryReport());
+    setMonthlyReport(await fetchMonthlyReport());
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="container">
+      <h1>Expense Tracker with AI Categorization</h1>
+      <div className="grid">
+        <div>
+          <AddExpenseForm onAdded={load} />
+          <CSVUpload onUploaded={load} />
+          <ExpenseTable expenses={expenses} />
+        </div>
+        <div>
+          <CategoryChart data={categoryReport} />
+          <MonthlyChart data={monthlyReport} />
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
-
-export default App
