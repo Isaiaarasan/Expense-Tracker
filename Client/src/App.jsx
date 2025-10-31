@@ -5,14 +5,18 @@ import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import Dashboard from "./Pages/Dashboard";
 import "./index.css";
+function toggleTheme() {
+  const current = document.documentElement.getAttribute("data-theme");
+  document.documentElement.setAttribute(
+    "data-theme",
+    current === "dark" ? "light" : "dark"
+  );
+}
 
 export default function App() {
   return (
     <Router>
-      <div className="bg-blue-500 text-white p-4">
-        Tailwind Test - If this is blue, Tailwind is working!
-      </div>
-      <Routes>
+    <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
