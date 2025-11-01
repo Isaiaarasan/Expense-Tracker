@@ -34,19 +34,13 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-      <form
-        onSubmit={handleSignup}
-        className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg w-96"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-100">
-          Create Account
-        </h2>
+    <div>
+      <form onSubmit={handleSignup}>
+        <h2>Create Account</h2>
 
         <input
           type="text"
           placeholder="Full Name"
-          className="w-full p-3 mb-4 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -55,7 +49,6 @@ export default function Signup() {
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-3 mb-4 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -64,24 +57,15 @@ export default function Signup() {
         <input
           type="password"
           placeholder="Password"
-          className="w-full p-3 mb-6 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
 
-        <button
-          type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded font-semibold"
-        >
-          Sign Up
-        </button>
+        <button type="submit">Sign Up</button>
 
-        <p className="text-sm text-center mt-4 text-gray-700 dark:text-gray-300">
-          Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">
-            Login
-          </Link>
+        <p>
+          Already have an account? <Link to="/login">Login</Link>
         </p>
       </form>
     </div>

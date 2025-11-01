@@ -35,19 +35,13 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-      <form
-        onSubmit={handleLogin}
-        className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg w-96"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-100">
-          Welcome Back
-        </h2>
+    <div>
+      <form onSubmit={handleLogin}>
+        <h2>Welcome Back</h2>
 
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-3 mb-4 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -56,24 +50,16 @@ export default function Login() {
         <input
           type="password"
           placeholder="Password"
-          className="w-full p-3 mb-6 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded font-semibold"
-        >
-          Login
-        </button>
+        <button type="submit">Login</button>
 
-        <p className="text-sm text-center mt-4 text-gray-700 dark:text-gray-300">
+        <p>
           Don’t have an account?{" "}
-          <Link to="/signup" className="text-blue-600 hover:underline">
-            Sign up
-          </Link>
+          <Link to="/signup">Sign up</Link>
         </p>
       </form>
     </div>
