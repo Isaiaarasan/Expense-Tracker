@@ -11,7 +11,7 @@ export default function Signup() {
     e.preventDefault();
     try {
       const res = await fetch(
-        "https.expense-tracker-hwrt.onrender.com/api/auth/signup",
+        "https://expense-tracker-hwrt.onrender.com/api/auth/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
