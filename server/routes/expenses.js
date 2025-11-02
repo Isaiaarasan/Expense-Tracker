@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const Expense = require("../models/Expense");
-const auth = require("../middleware/auth");
+const Expense = require("../models/Expense.js");
+const auth = require("../middleware/auth.js");
 const multer = require("multer");
 const fs = require("fs");
 const csv = require("csv-parser");
@@ -14,13 +14,17 @@ const upload = multer({ dest: "uploads/" });
 // ➕ Add new expense for logged-in user
 router.post("/", auth, async (req, res) => {
   try {
-
     const { title, amount, category, date } = req.body;
 
     // If user provides category, use it; otherwise classify automatically
-    const predictedCategory = category || await classifyCategory(title);
+    const predictedCategory = category || (await classifyCategory(title));
 
-    console.log("[EXPENSE DEBUG] Category received:", category, "| Predicted:", predictedCategory);
+    console.log(
+      "[EXPENSE DEBUG] Category received:",
+      category,
+      "| Predicted:",
+      predictedCategory
+    );
 
     const expense = new Expense({
       userId: req.user.id,
