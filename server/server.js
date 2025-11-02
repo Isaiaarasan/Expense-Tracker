@@ -16,7 +16,7 @@ app.use(cors({ origin: process.env.ORIGIN || "*" }));
 app.use("/api/expense", expensesRoute);
 app.use("/api/auth", authRoutes); // ⬅️ ADD THIS LINE
 
-connectDB(process.env.MONGODB_URI);
+connectDB();
 
 app.get("/", (req, res) => res.send("Expense AI server is running"));
 

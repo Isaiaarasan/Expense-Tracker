@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -7,31 +8,34 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(
-        "https.expense-tracker-hwrt.onrender.com/api/auth/login",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        }
-      );
-      if (!res.ok) {
-        const err = await res.json();
-        alert(err.error || "Invalid credentials");
-        return;
+  e.preventDefault();
+
+  try {
+    const res = await axios.post(
+      "https://expense-tracker-hwrt.onrender.com/api/auth/login",
+      { email, password },
+      {
+        headers: { "Content-Type": "application/json" }
       }
-      const data = await res.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify({ email }));
-      alert("Login successful!");
-      navigate("/dashboard");
-    } catch (err) {
-      console.error("Login error:", err);
+    );
+
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("user", JSON.stringify({ email }));
+
+    alert("Login successful!");
+    navigate("/dashboard");
+
+  } catch (err) {
+    if (err.response) {
+      // Server returned error
+      alert(err.response.data.error || "Invalid credentials");
+    } else {
+      // Network or other error
       alert("Server error. Please try again later.");
     }
-  };
+    console.error("Login error:", err);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center text-gray-200 relative p-4 overflow-hidden">
