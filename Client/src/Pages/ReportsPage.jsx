@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import MonthlyChart from "../components/MonthlyChart";
 import CategoryChart from "../components/CategoryChart";
-import { fetchAll, fetchMonthlyReport } from "../api";
+import { fetchAll } from "../api"; // fetchMonthlyReport is not needed
 
 export default function ReportsPage() {
   const [expenses, setExpenses] = useState([]);
-  const [monthlyData, setMonthlyData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
     setLoading(true);
     try {
+      // We only need to fetch all expenses
       const allExpenses = await fetchAll();
-      const monthlyReport = await fetchMonthlyReport();
       setExpenses(Array.isArray(allExpenses) ? allExpenses : []);
-      setMonthlyData(Array.isArray(monthlyReport) ? monthlyReport : []);
     } catch (err) {
       console.error("Error loading report data:", err);
       alert("Failed to load report data.");
@@ -26,6 +24,43 @@ export default function ReportsPage() {
   useEffect(() => {
     loadData();
   }, []);
+
+  // --- ADDED PROCESSING LOGIC (Copied from Dashboard) ---
+
+  // 📅 Monthly Spending Data
+  const monthlyData = useMemo(() => {
+    const grouped = expenses.reduce((acc, curr) => {
+      if (!curr.date || !curr.amount) return acc;
+      const date = new Date(curr.date);
+      if (isNaN(date)) return acc;
+      const month = date.toLocaleString("default", {
+        month: "short",
+        year: "numeric",
+      }); // e.g. "Oct 2024"
+
+      if (!acc[month]) acc[month] = { month, total: 0 };
+      acc[month].total += Number(curr.amount);
+      return acc;
+    }, {});
+    return Object.values(grouped).sort(
+      (a, b) => new Date(a.month) - new Date(b.month)
+    );
+  }, [expenses]);
+
+  // 📊 Category Totals
+  const categoryTotals = useMemo(() => {
+    const totals = expenses.reduce((acc, curr) => {
+      const category = curr.category || "Uncategorized";
+      acc[category] = (acc[category] || 0) + (curr.amount || 0);
+      return acc;
+    }, {});
+    return Object.entries(totals).map(([category, amount]) => ({
+      category,
+      amount, // Assuming CategoryChart expects 'amount'. If it expects 'total', change this.
+    }));
+  }, [expenses]);
+
+  // ----------------------------------------------------
 
   return (
     <main className="flex-1 p-6 lg:p-10 overflow-auto text-gray-200 relative">
@@ -55,6 +90,7 @@ export default function ReportsPage() {
                 Loading chart...
               </div>
             ) : (
+              // This now receives the processed monthly data
               <MonthlyChart data={monthlyData} />
             )}
           </div>
@@ -71,7 +107,9 @@ export default function ReportsPage() {
                 Loading chart...
               </div>
             ) : (
-              <CategoryChart data={expenses} />
+              // --- THIS IS THE FIX ---
+              // Pass the processed 'categoryTotals' array, not the raw 'expenses'
+              <CategoryChart data={categoryTotals} />
             )}
           </div>
         </div>

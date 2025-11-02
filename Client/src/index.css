@@ -1,1 +1,108 @@
 @import "tailwindcss";
+/* Add this to your index.css file */
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotateX(20deg) rotateY(-10deg);
+  }
+  50% {
+    transform: translateY(-20px) rotateX(20deg) rotateY(-10deg);
+  }
+  100% {
+    transform: translateY(0px) rotateX(20deg) rotateY(-10deg);
+  }
+}
+
+@keyframes float-delay {
+  0% {
+    transform: translateY(0px) rotateX(15deg) rotateY(10deg) scale(0.9);
+  }
+  50% {
+    transform: translateY(-15px) rotateX(15deg) rotateY(10deg) scale(0.9);
+  }
+  100% {
+    transform: translateY(0px) rotateX(15deg) rotateY(10deg) scale(0.9);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delay {
+  animation: float-delay 8s ease-in-out infinite;
+}
+/* Add these new animations to your index.css file */
+
+@keyframes float-fast {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-25px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes float-slow {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes float-reverse {
+  0% { transform: translateY(-10px); }
+  50% { transform: translateY(0px); }
+  100% { transform: translateY(-10px); }
+}
+
+/* These are the classes you will use in your JSX */
+.animate-float-fast {
+  animation: float-fast 5s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 6s ease-in-out infinite;
+}
+@keyframes text-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-text-gradient {
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: text-gradient 5s ease-in-out infinite;
+}
+
+/* --- 3D FLOATING ANIMATIONS --- */
+@keyframes float-fast {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-25px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes float-slow {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes float-reverse {
+  0% { transform: translateY(-10px); }
+  50% { transform: translateY(0px); }
+  100% { transform: translateY(-10px); }
+}
+
+.animate-float-fast {
+  animation: float-fast 5s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+.animate-float-reverse {
+  animation: float-reverse 6s ease-in-out infinite;
+}

@@ -165,7 +165,7 @@ export default function CategoryChart({ data }) {
         borderRadius: "12px",
         height: "100%",
         margin: "0 auto",
-        width: "450px"
+        width: "550px"
       }}
     >
       <div style={{ height: "100%" }}>
@@ -178,17 +178,6 @@ export default function CategoryChart({ data }) {
           </div>
         )}
       </div>
-
-      {/* {labels.length > 0 && (
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "15px",
-            fontSize: "16px",
-          }}
-        >
-        </div>
-      )} */}
     </div>
   );
 }

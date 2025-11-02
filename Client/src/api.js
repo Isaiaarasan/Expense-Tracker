@@ -1,4 +1,4 @@
-const SERVER = import.meta.env.VITE_SERVER_URL || "http://localhost:4000";
+const SERVER = import.meta.env.VITE_SERVER_URL || "https://expense-tracker-hwrt.onrender.com";
 
 // 🔒 Helper: get auth header
 function getAuthHeader() {

@@ -8,24 +8,23 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     try {
-      const res = await fetch("http://localhost:4000/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
+      const res = await fetch(
+        "https.expense-tracker-hwrt.onrender.com/api/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
       if (!res.ok) {
         const err = await res.json();
         alert(err.error || "Invalid credentials");
         return;
       }
-
       const data = await res.json();
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify({ email }));
-
       alert("Login successful!");
       navigate("/dashboard");
     } catch (err) {
@@ -35,17 +34,26 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center text-gray-200 relative p-4">
+    <div className="min-h-screen flex items-center justify-center text-gray-200 relative p-4 overflow-hidden">
       {/* --- BACKGROUND (The Aurora) --- */}
       <div className="absolute inset-0 -z-10 h-full w-full bg-slate-900 bg-[radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
 
       <form
         onSubmit={handleLogin}
-        className="w-full max-w-md p-8 sm:p-10 bg-white/5 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-lg space-y-7"
+        className="w-full max-w-md p-8 sm:p-10 bg-white/5 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-lg space-y-7
+                   animate__animated animate__bounce" // <-- ANIMATION ADDED
       >
-        <h2 className="text-3xl font-bold text-center text-white">
-          Welcome Back 🚀
-        </h2>
+        <div className="text-center">
+          <img
+            src="image.png"
+            alt="AI.Tracker Logo"
+            className="w-16 h-16 mx-auto mb-4"
+          />
+          <h2 className="text-3xl font-bold text-white">Welcome Back</h2>
+          <p className="text-gray-400 mt-2">
+            Log in to your AI.Tracker account.
+          </p>
+        </div>
 
         {/* Email Input */}
         <input

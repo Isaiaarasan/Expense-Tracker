@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"; // useNavigate is removed (was only use
 import { fetchAll } from "../api";
 
 // ... (deleteExpense function unchanged)
-const SERVER = import.meta.env.VITE_SERVER_URL || "http://localhost:4000";
+const SERVER = import.meta.env.VITE_SERVER_URL || "https://expense-tracker-hwrt.onrender.com";
 async function deleteExpense(id) {
   const token = localStorage.getItem("token");
   const res = await fetch(`${SERVER}/api/expense/${id}`, {

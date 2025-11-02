@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import ExpenseTable from "../components/ExpenseTable";
 import MonthlyChart from "../components/MonthlyChart";
 import CategoryChart from "../components/CategoryChart";
-import { fetchAll, fetchMonthlyReport } from "../api";
+import { fetchAll } from "../api";
 
 // --- ICONS ---
 const IconAdd = () => <span>➕</span>;
 // --------------------
 
-// 🧾 Local delete function
-const SERVER = import.meta.env.VITE_SERVER_URL || "http://localhost:4000";
+const SERVER =
+  import.meta.env.VITE_SERVER_URL ||
+  "https://expense-tracker-hwrt.onrender.com";
 
+// 🧾 Delete Expense (local function)
 async function deleteExpense(id) {
   const token = localStorage.getItem("token");
   const res = await fetch(`${SERVER}/api/expense/${id}`, {
@@ -28,7 +30,7 @@ async function deleteExpense(id) {
   return res.json();
 }
 
-// --- NEW Glassmorphism Stat Card ---
+// 🌟 Glassmorphism Stat Card
 const StatCard = ({ title, value, icon, color }) => (
   <div
     className={`p-6 rounded-2xl bg-white/5 border border-white/10 shadow-2xl backdrop-blur-lg
@@ -45,48 +47,31 @@ const StatCard = ({ title, value, icon, color }) => (
     </div>
   </div>
 );
-// ------------------------------------
 
 export default function Dashboard() {
   const [expenses, setExpenses] = useState([]);
-  const [monthlyData, setMonthlyData] = useState([]);
-  const [categoryData, setCategoryData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ... (loadData logic is unchanged)
+  // 🔁 Load Expenses
   const loadData = async () => {
     setLoading(true);
     try {
       const allExpenses = await fetchAll();
-      const monthlyReport = await fetchMonthlyReport();
       setExpenses(Array.isArray(allExpenses) ? allExpenses : []);
-      setMonthlyData(Array.isArray(monthlyReport) ? monthlyReport : []);
-      if (Array.isArray(allExpenses)) {
-        const categoryTotals = allExpenses.reduce((acc, expense) => {
-          const category = expense.category || "Other";
-          acc[category] = (acc[category] || 0) + (expense.amount || 0);
-          return acc;
-        }, {});
-        const categoryArray = Object.keys(categoryTotals).map((category) => ({
-          category,
-          total: categoryTotals[category],
-        }));
-        setCategoryData(categoryArray);
-      }
     } catch (err) {
-      console.error("Error loading dashboard data:", err);
+      console.error("Error loading expenses:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  // ... (handleDelete logic is unchanged)
+  // 🗑️ Handle Delete
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this expense?"))
       return;
     try {
       await deleteExpense(id);
-      loadData(); // Reload all data for consistency
+      loadData();
     } catch (err) {
       alert(err.message);
     }
@@ -96,6 +81,39 @@ export default function Dashboard() {
     loadData();
   }, []);
 
+  // 📅 Monthly Spending Data
+  const monthlyData = useMemo(() => {
+    const grouped = expenses.reduce((acc, curr) => {
+      if (!curr.date || !curr.amount) return acc;
+      const date = new Date(curr.date);
+      if (isNaN(date)) return acc;
+      const month = date.toLocaleString("default", {
+        month: "short",
+        year: "numeric",
+      }); // e.g. "Oct 2024"
+
+      if (!acc[month]) acc[month] = { month, total: 0 };
+      acc[month].total += Number(curr.amount);
+      return acc;
+    }, {});
+    return Object.values(grouped).sort(
+      (a, b) => new Date(a.month) - new Date(b.month)
+    );
+  }, [expenses]);
+
+  // 📊 Category Totals
+  const categoryTotals = useMemo(() => {
+    const totals = expenses.reduce((acc, curr) => {
+      const category = curr.category || "Uncategorized";
+      acc[category] = (acc[category] || 0) + (curr.amount || 0);
+      return acc;
+    }, {});
+    return Object.entries(totals).map(([category, amount]) => ({
+      category,
+      amount,
+    }));
+  }, [expenses]);
+
   const totalSpent = expenses
     .reduce((acc, e) => acc + (e.amount || 0), 0)
     .toFixed(2);
@@ -104,7 +122,6 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="flex-1 p-6 lg:p-10 overflow-auto text-gray-200 relative flex items-center justify-center">
-        {/* --- BACKGROUND (The Aurora) --- */}
         <div className="absolute inset-0 -z-10 h-full w-full bg-slate-900 bg-[radial-gradient(125%_125%_at_50%_10%,#000_40%,#166534_100%)]"></div>
         <div className="text-2xl font-semibold text-emerald-300 animate-pulse">
           Loading Financial Command Center... 🧠
@@ -115,10 +132,9 @@ export default function Dashboard() {
 
   return (
     <main className="flex-1 p-6 lg:p-10 overflow-auto text-gray-200 relative">
-      {/* --- BACKGROUND (The Aurora) --- */}
       <div className="absolute inset-0 -z-10 h-full w-full bg-slate-900 bg-[radial-gradient(125%_125%_at_50%_10%,#000_40%,#166534_100%)]"></div>
 
-      {/* --- HEADER WITH BUTTON --- */}
+      {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-10">
         <div>
           <h1 className="text-4xl font-extrabold text-white">
@@ -137,22 +153,25 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      {/* --- DYNAMIC WIDGET GRID --- */}
+      {/* Dashboard Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* --- Main Chart (Large) --- */}
+        {/* --- FIX 1: MONTHLY CHART --- */}
         <div className="lg:col-span-2 p-6 rounded-2xl bg-white/5 border border-white/10 shadow-2xl backdrop-blur-lg transform hover:scale-[1.01] transition-transform duration-500">
           <h2 className="text-2xl font-semibold text-white mb-6 border-b border-white/10 pb-4">
             Monthly Spending Trend
           </h2>
-          {/* Note: Ensure your MonthlyChart component has transparent background */}
-          <MonthlyChart data={monthlyData} />
+          {/* A container for a chart MUST have a defined height */}
+          <div className="h-96">
+            <MonthlyChart data={monthlyData} />
+          </div>
         </div>
+        {/* --------------------------- */}
 
-        {/* --- Key Stats (Small) --- */}
+        {/* Stat Cards */}
         <div className="lg:col-span-1 space-y-8">
           <StatCard
             title="Total Spent (All Time)"
-            value={totalSpent}
+            value={`₹${totalSpent}`}
             icon="💰"
             color="text-emerald-400"
           />
@@ -164,22 +183,45 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* --- Category Chart --- */}
+        {/* --- FIX 2: CATEGORY BREAKDOWN --- */}
         <div className="lg:col-span-3 p-6 rounded-2xl bg-white/5 border border-white/10 shadow-2xl backdrop-blur-lg transform hover:scale-[1.01] transition-transform duration-500">
           <h2 className="text-2xl font-semibold text-white mb-6 border-b border-white/10 pb-4">
             Category Breakdown
           </h2>
-          <div className="h-100 flex items-center justify-center flex-row justify-between">
-            <div className="flex-1 h-full ">
-              
 
+          {/* Use a simple 2-column grid. It's cleaner and responsive. */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            {/* COLUMN 1: Category List (with scrolling) */}
+            <div className="max-h-[400px] overflow-auto space-y-3 pr-2">
+              {categoryTotals.length === 0 ? (
+                <div className="text-gray-400">No expenses to display.</div>
+              ) : (
+                categoryTotals.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-row justify-between items-center bg-white/5 border border-white/10
+                               p-4 rounded-lg transition-all duration-200 hover:bg-white/10"
+                  >
+                    <span className="text-lg font-medium text-white">
+                      {item.category}
+                    </span>
+                    <span className="text-lg font-semibold text-emerald-300">
+                      ₹{item.amount.toFixed(2)}
+                    </span>
+                  </div>
+                ))
+              )}
             </div>
-            <CategoryChart data={expenses} />
+
+            {/* COLUMN 2: Category Chart */}
+            <div className="h-96">
+              {/* BUG FIX: You must pass 'categoryTotals' to the chart, not the raw 'expenses' */}
+              <CategoryChart data={categoryTotals} />
+            </div>
           </div>
         </div>
+        {/* --------------------------------- */}
       </div>
-
-      {/* --- Full Expense Table (Bottom) --- */}
     </main>
   );
 }

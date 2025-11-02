@@ -29,8 +29,10 @@ export default function Sidebar() {
 
   return (
     <nav className="w-20 lg:w-64 bg-slate-900 text-gray-300 p-4 lg:p-6 flex flex-col shadow-2xl z-10">
-      <div className="text-white text-2xl font-bold mb-10 hidden lg:block">
-        💸 AI.Tracker
+
+      <div className="text-white text-2xl font-bold mb-10 hidden lg:flex items-center space-x-3">
+        <img src="image.png" alt="AI.Tracker Logo" className="w-10 h-10" />
+        <span>AI.Tracker</span>
       </div>
       <div className="text-white text-3xl font-bold mb-10 lg:hidden text-center">
         💸

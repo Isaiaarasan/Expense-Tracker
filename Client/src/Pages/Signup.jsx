@@ -9,23 +9,22 @@ export default function Signup() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
     try {
-      const res = await fetch("http://localhost:4000/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
-
+      const res = await fetch(
+        "https.expense-tracker-hwrt.onrender.com/api/auth/signup",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password }),
+        }
+      );
       if (!res.ok) {
         const err = await res.json();
         alert(err.error || "Signup failed");
         return;
       }
-
-      const data = await res.json();
-      alert("Signup successful!");
-      localStorage.setItem("user", JSON.stringify({ email }));
+      alert("Signup successful! Please login.");
+      localStorage.removeItem("user"); // Clear any old user data
       navigate("/login");
     } catch (err) {
       console.error("Signup error:", err);
@@ -42,9 +41,17 @@ export default function Signup() {
         onSubmit={handleSignup}
         className="w-full max-w-md p-8 sm:p-10 bg-white/5 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-lg space-y-7"
       >
-        <h2 className="text-3xl font-bold text-center text-white">
-          Create Your Account ✨
-        </h2>
+        <div className="text-center">
+          <img
+            src="image.png"
+            alt="AI.Tracker Logo"
+            className="w-16 h-16 mx-auto mb-4"
+          />
+          <h2 className="text-3xl font-bold text-white">Create Your Account</h2>
+          <p className="text-gray-400 mt-2">
+            Join the future of expense tracking.
+          </p>
+        </div>
 
         {/* Name Input */}
         <input

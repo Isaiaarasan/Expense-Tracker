@@ -5,7 +5,7 @@ export default function CSVUpload({ onUploaded }) {
   const [file, setFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
-  const SERVER = import.meta.env.VITE_SERVER_URL || "http://localhost:4000";
+  const SERVER = import.meta.env.VITE_SERVER_URL || "https://expense-tracker-hwrt.onrender.com";
   const token = localStorage.getItem("token");
 
   const handleFile = (e) => setFile(e.target.files[0]);
