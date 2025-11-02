@@ -25,18 +25,18 @@ export const addExpense = async (data) => {
   return res.json();
 };
 
-// 📤 Upload CSV (optional auth if backend checks user)
+// 📤 Upload CSV
 export async function uploadCSV(formData) {
   const res = await fetch(`${SERVER}/api/expense/csv`, {
     method: "POST",
     headers: {
-      ...getAuthHeader(),
+      ...getAuthHeader(), // ✅ No manual "Content-Type"
     },
     body: formData,
   });
 
   if (!res.ok) {
-    const err = await res.json();
+    const err = await res.json().catch(() => ({}));
     throw new Error(err.error || "Failed to upload CSV");
   }
 
@@ -89,6 +89,24 @@ export async function fetchMonthlyReport() {
   if (!res.ok) {
     const err = await res.json();
     throw new Error(err.error || "Failed to fetch monthly report");
+  }
+
+  return res.json();
+}
+
+// 🗑️ Delete an expense by ID
+export async function deleteExpense(id) {
+  const res = await fetch(`${SERVER}/api/expense/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      ...getAuthHeader(),
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || "Failed to delete expense");
   }
 
   return res.json();

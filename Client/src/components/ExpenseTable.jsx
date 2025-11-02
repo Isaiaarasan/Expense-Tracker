@@ -1,44 +1,42 @@
 import React from "react";
 
-export default function ExpenseTable({ expenses }) {
-  return (
-    <div>
-      <h3>Expense History</h3>
+export default function ExpenseTable({ expenses, onDelete }) {
+  if (!expenses.length)
+    return <p className="text-gray-500 text-center mt-4">No expenses yet.</p>;
 
-      {!expenses || expenses.length === 0 ? (
-        <div>
-          No expenses recorded
-          <br />
-          <span>Add your first expense to see it here</span>
-        </div>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Amount</th>
-              <th>Category</th>
-              <th>Date</th>
+  return (
+    <div className="overflow-x-auto mt-4">
+      <table className="min-w-full bg-white shadow-md rounded-lg">
+        <thead>
+          <tr className="bg-gray-200 text-gray-700">
+            <th className="px-4 py-2">Title</th>
+            <th className="px-4 py-2">Amount</th>
+            <th className="px-4 py-2">Category</th>
+            <th className="px-4 py-2">Date</th>
+            <th className="px-4 py-2">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {expenses.map((exp) => (
+            <tr key={exp._id} className="border-b">
+              <td className="px-4 py-2">{exp.title}</td>
+              <td className="px-4 py-2">₹{exp.amount}</td>
+              <td className="px-4 py-2">{exp.category}</td>
+              <td className="px-4 py-2">
+                {new Date(exp.date).toLocaleDateString()}
+              </td>
+              <td className="px-4 py-2">
+                <button
+                  onClick={() => onDelete(exp._id)}
+                  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md"
+                >
+                  🗑️ Delete
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {(expenses || []).map((e) => (
-              <tr key={e._id || `${e.title}-${e.amount}-${e.date}`}>
-                <td>{e.title}</td>
-                <td>Rs {parseFloat(e.amount).toLocaleString()}</td>
-                <td>{e.category}</td>
-                <td>
-                  {new Date(e.date).toLocaleDateString("en-IN", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

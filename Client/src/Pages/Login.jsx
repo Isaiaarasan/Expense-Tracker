@@ -35,31 +35,59 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleLogin}>
-        <h2>Welcome Back</h2>
+    <div className="min-h-screen flex items-center justify-center text-gray-200 relative p-4">
+      {/* --- BACKGROUND (The Aurora) --- */}
+      <div className="absolute inset-0 -z-10 h-full w-full bg-slate-900 bg-[radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
 
+      <form
+        onSubmit={handleLogin}
+        className="w-full max-w-md p-8 sm:p-10 bg-white/5 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-lg space-y-7"
+      >
+        <h2 className="text-3xl font-bold text-center text-white">
+          Welcome Back 🚀
+        </h2>
+
+        {/* Email Input */}
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Email Address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          className="w-full px-5 py-3 bg-white/5 border border-white/10 rounded-lg shadow-inner
+                     text-white placeholder-gray-400
+                     focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition duration-200"
         />
 
+        {/* Password Input */}
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          className="w-full px-5 py-3 bg-white/5 border border-white/10 rounded-lg shadow-inner
+                     text-white placeholder-gray-400
+                     focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition duration-200"
         />
 
-        <button type="submit">Login</button>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-lg shadow-lg
+                     transition duration-300 transform hover:scale-[1.01] active:scale-95"
+        >
+          Login
+        </button>
 
-        <p>
+        <p className="text-center text-sm text-gray-400 pt-2">
           Don’t have an account?{" "}
-          <Link to="/signup">Sign up</Link>
+          <Link
+            to="/signup"
+            className="text-emerald-400 hover:underline font-medium"
+          >
+            Sign up
+          </Link>
         </p>
       </form>
     </div>

@@ -18,7 +18,7 @@ export default function AddExpenseForm({ onAdded }) {
       setAmount("");
       setDate("");
       if (onAdded) onAdded();
-      alert("✅ Expense added successfully! (AI categorization applied)");
+      // No alert here, the parent page will handle it.
     } catch (error) {
       alert("❌ Failed to add expense. Please try again.");
     } finally {
@@ -27,23 +27,34 @@ export default function AddExpenseForm({ onAdded }) {
   };
 
   return (
-    <div>
-      <h3>Add New Expense</h3>
+    <div className="text-white">
+      <h3 className="text-2xl font-semibold mb-6 text-center">
+        Log a New Expense
+      </h3>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Title Field */}
         <div>
-          <div>
-            <label>Expense Title *</label>
-            <input
-              placeholder="e.g., Dinner at Restaurant"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Expense Title *
+          </label>
+          <input
+            placeholder="e.g., Dinner at Restaurant"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg shadow-inner
+                       focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition duration-200
+                       placeholder-gray-500"
+          />
+        </div>
 
-          <div>
-            <label>Amount (₹) *</label>
+        {/* Amount & Date Fields (Side-by-side) */}
+        <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-6 sm:space-y-0">
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Amount (₹) *
+            </label>
             <input
               placeholder="0.00"
               type="number"
@@ -52,27 +63,42 @@ export default function AddExpenseForm({ onAdded }) {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               required
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg shadow-inner
+                         focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition duration-200
+                         placeholder-gray-500"
             />
           </div>
-
-          <div>
-            <label>Date</label>
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Date
+            </label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg shadow-inner
+                         focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition duration-200
+                         text-gray-400"
             />
           </div>
+        </div>
 
-          <div>
-            <button type="submit" disabled={!title || !amount || isSubmitting}>
-              {isSubmitting ? "⏳ Adding..." : "💰 Add Expense"}
-            </button>
-          </div>
+        {/* Submit Button */}
+        <div className="pt-4">
+          <button
+            type="submit"
+            disabled={!title || !amount || isSubmitting}
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-lg shadow-lg
+                       transition duration-300 transform hover:scale-[1.01]
+                       disabled:bg-gray-500 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? "⏳ Adding..." : "💰 Add Expense & Categorize"}
+          </button>
         </div>
       </form>
-
-      <div>💡 AI will automatically categorize your expense based on the title</div>
+      <p className="text-center text-gray-400 text-sm mt-6">
+        💡 AI will automatically categorize your expense based on the title.
+      </p>
     </div>
   );
 }
