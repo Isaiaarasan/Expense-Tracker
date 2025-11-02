@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: process.env.ORIGIN || "*" }));
+app.use(cors({ origin: "*" }));
 
 // Routes
 app.use("/api/expense", expensesRoute);
