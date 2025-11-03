@@ -14,8 +14,6 @@
     "axios": "^1.13.1",
     "chart.js": "^4.5.1",
     "chartjs-plugin-datalabels": "^2.2.0",
-    "dotenv": "^17.2.3",
-    "json2csv": "^6.0.0-alpha.2",
     "jspdf": "^2.5.2",
     "nodemailer": "^7.0.10",
     "papaparse": "^5.4.1",
