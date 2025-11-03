@@ -1,5 +1,11 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AppLayout from "./components/AppLayout"; // <-- Import the layout
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
+import AppLayout from "./components/AppLayout";
 import LandingPage from "./Pages/LandingPage";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
@@ -7,28 +13,34 @@ import Dashboard from "./Pages/Dashboard";
 import ExpenseList from "./Pages/ExpenseList";
 import AddExpensePage from "./Pages/AddExpensePage";
 import ReportsPage from "./Pages/ReportsPage";
-import "./index.css"; 
+import "./index.css";
 
-// --- ADD THIS LINE ---
+// --- Protected Route ---
+const ProtectedRoute = () => {
+  const isAuthenticated = localStorage.getItem("token");
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+};
+
+// --- App Component ---
 export default function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         {/* --- Public Routes --- */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* --- Private Routes --- */}
-        {/* All routes inside AppLayout will share the sidebar */}
+        {/* --- Protected Routes (Inside Layout) --- */}
         <Route element={<AppLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/expenselist" element={<ExpenseList />} />
-          <Route path="/add-expense" element={<AddExpensePage />} />
-          <Route path="/reports" element={<ReportsPage/>}/>
-          {/* <Route path="/reports" element={<YourReportsPage />} /> */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/expenselist" element={<ExpenseList />} />
+            <Route path="/add-expense" element={<AddExpensePage />} />
+            <Route path="/reports" element={<ReportsPage />} />
+          </Route>
         </Route>
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
