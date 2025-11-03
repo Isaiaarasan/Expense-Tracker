@@ -61,9 +61,10 @@ export default function LandingPage() {
               transform: "translateZ(-150px) rotateX(10deg) rotateY(-10deg)",
             }}
           >
-            <img
-              src="image_50a12d.png" // CORRECTED FILENAME
-              alt="Dashboard Mock-up"
+            <div className="flex-shrink-0 w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-lg shadow-inner">
+              💸
+            </div>
+            <img // CORRECTED FILENAME
               className="w-full h-auto rounded-lg opacity-80"
             />
           </div>
@@ -145,7 +146,7 @@ export default function LandingPage() {
             }}
           >
             <img
-              src="image_5befaf.png" 
+              src="image_5.png"
               alt="Category List"
               className="w-full h-auto rounded-lg opacity-50"
             />
@@ -168,11 +169,7 @@ export default function LandingPage() {
       {/* --- Header (Foreground) --- */}
       <header className="absolute top-0 left-0 w-full p-6 flex justify-between items-center z-20">
         <div className="flex items-center space-x-3">
-          <img
-            src="image_512854.png"
-            alt="AI.Tracker Logo"
-            className="w-10 h-10"
-          />{" "}
+          <img src="image.png" alt="AI.Tracker Logo" className="w-10 h-10" />{" "}
           {/* CORRECTED FILENAME */}
           <span className="text-2xl font-bold text-white">AI.Tracker</span>
         </div>
